@@ -1,4 +1,6 @@
 namespace app.Controllers {
+
+  //HomeController
   export class HomeController {
     public movies;
 
@@ -7,6 +9,7 @@ namespace app.Controllers {
     }
   }
 
+  //AddMovieController
   export class AddMovieController {
     public movie;
     public id;
@@ -33,6 +36,28 @@ namespace app.Controllers {
       })
     }
   }
+
+  //DeleteMovieController
+  export class DeleteMovieController {
+    public id;
+
+    constructor(
+      private movieService: app.Services.MovieService,
+      private $state: ng.ui.IStateService,
+      $stateParams: ng.ui.IStateParamsService
+    ) {
+      if($stateParams) {
+        this.id = $stateParams['id'];
+      }
+    }
+
+    public remove() {
+      this.movieService.remove(this.id).then(() => {
+        this.$state.go("Home");
+      })
+    }
+  }
+
 
   angular.module('app').controller('HomeController', HomeController);
 }

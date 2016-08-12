@@ -16,6 +16,10 @@ namespace app.Services {
       return this.MovieResource.query();
     }
 
+    public remove(id) {
+      return this.MovieResource.remove({id: id}).$promise;
+    }
+
   }
   angular.module('app').service('movieService', MovieService);
 }
