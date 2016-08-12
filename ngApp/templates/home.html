@@ -1,3 +1,10 @@
 <h1>Home Page</h1>
 
+<ul>
+  <li ng-repeat="movie in vm.movies">
+    <b>Title</b>: {{movie.title}}, <b>Genre</b>: {{movie.genre}}
+    <a href="/updateMovie/{{movie._id}}">Edit</a>
+  </li>
+</ul>
+
 <a href="/addMovie">Add Movie</a>

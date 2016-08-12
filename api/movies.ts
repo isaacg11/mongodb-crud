@@ -27,7 +27,9 @@ let movieId = movies.length;
 
 /* GET movies */
 router.get('/movies', function(req, res, next) {
-  res.json(movies);
+  Movie.find({date_deleted: null}).then((movies) => {
+    res.json(movies);
+  })
 });
 
 /* GET movie by id */
@@ -43,19 +45,30 @@ router.get('/movies/:id', function(req, res, next) {
 
 /* Post to create or update movie */
 router.post('/movies', function(req, res, next) {
-  let new_movie = new Movie({
-    title: req.body.title,
-    genre: req.body.genre,
-    date_created: new Date()
-  });
+  if(req.body.id === undefined) {
+    let new_movie = new Movie({
+      title: req.body.title,
+      genre: req.body.genre,
+      date_created: new Date()
+    });
 
-  new_movie.save((err, res) => {
-    if(err) {
-      console.log(err);
-    } else {
-      console.log(res);
-    }
-  })
+    new_movie.save((err, res) => {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log(res);
+      }
+    })
+  }
+  else {
+    Movie.findByIdAndUpdate(req.body.id, { $set: {title: req.body.title, genre: req.body.genre}}, (err, res) => {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log(res);
+      }
+    })
+  }
   res.sendStatus(200);
 });
 
