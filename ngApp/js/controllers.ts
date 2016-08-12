@@ -3,9 +3,11 @@ namespace app.Controllers {
   //HomeController
   export class HomeController {
     public movies;
+    public user;
 
     constructor(private movieService: app.Services.MovieService) {
-      this.movies = this.movieService.getAll();
+      this.user = localStorage.getItem("id");
+      this.movies = this.movieService.getAll(this.user);
     }
   }
 
@@ -13,6 +15,7 @@ namespace app.Controllers {
   export class AddMovieController {
     public movie;
     public id;
+    public user;
 
     constructor(
       private movieService: app.Services.MovieService,
@@ -22,13 +25,15 @@ namespace app.Controllers {
       if($stateParams) {
         this.id = $stateParams['id'];
       }
+      this.user = localStorage.getItem("id");
     }
 
     public save() {
       let params = {
         title: this.movie.title,
         genre: this.movie.genre,
-        id: this.id
+        id: this.id,
+        user: this.user
       };
 
       this.movieService.save(params).then((res) => {
@@ -57,6 +62,26 @@ namespace app.Controllers {
       })
     }
   }
+
+  //LoginController
+  export class LoginController {
+    public user;
+
+    constructor(
+      private userService: app.Services.UserService,
+      private $state: ng.ui.IStateService
+    ) {
+
+    }
+
+    public login() {
+      this.userService.login(this.user).then((res) => {
+        localStorage.setItem("id", res._id);
+        this.$state.go('Home');
+      })
+    }
+  }
+
 
 
   angular.module('app').controller('HomeController', HomeController);
